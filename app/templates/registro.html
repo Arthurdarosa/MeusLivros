@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+</head>
+<style>
+      body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        h2{
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        label {
+            display: block;
+            color: #555;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            outline: none;
+        }
+        input[type="email"]:focus, input[type="password"]:focus {
+            border-color: #f093fb;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(240, 147, 251, 0.1);
+            transform: translateY(-1px);
+        }
+        input[type="email"]:hover, input[type="password"]:hover {
+            border-color: #cbd5e0;
+            background: white;
+        }
+        .btn {            
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(240, 147, 251, 0.3);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        .error {
+            color: #e53e3e;
+            background: #fed7d7;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        .success {
+            color: #38a169;
+            background: #c6f6d5;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 2rem;
+                margin: 1rem;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+            input[type="email"], input[type="password"] {
+                padding: 12px 16px;
+                font-size: 16px; /* Evita zoom no iOS */
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                width: 98%;
+                padding: 1.5rem;
+                margin: 0.5rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 55%;
+            right: 0;
+            height: 1px;
+            background: #a6a6a6;
+        }
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            width: 45%;
+            background: #a6a6a6;
+        }
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .btn-secondary {
+            box-sizing: border-box;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const senha = document.getElementById('senha');
+            const confirmarSenha = document.getElementById('confirmar_senha');
+            const senhaError = document.getElementById('senhaError');
+            const submitBtn = document.getElementById('submitBtn');
+            const form = document.getElementById('registroForm');
+            
+            // Verificar se há mensagem de sucesso e redirecionar
+            const successMessage = document.querySelector('.success');
+            if (successMessage && successMessage.textContent.includes('Redirecionando')) {
+                setTimeout(function() {
+                    window.location.href = '/login';
+                }, 1000);
+            }
+            
+            function validarSenhas() {
+                const senhaValue = senha.value;
+                const confirmarValue = confirmarSenha.value;
+                
+                // Limpar erro anterior
+                senhaError.style.display = 'none';
+                confirmarSenha.style.borderColor = '#e1e5e9';
+                
+                // Se ambos os campos estão preenchidos
+                if (senhaValue && confirmarValue) {
+                    if (senhaValue !== confirmarValue) {
+                        senhaError.textContent = 'As senhas não coincidem!';
+                        senhaError.style.display = 'block';
+                        confirmarSenha.style.borderColor = '#e53e3e';
+                        return false;
+                    } else {
+                        // Senhas coincidem
+                        confirmarSenha.style.borderColor = '#38a169';
+                        return true;
+                    }
+                }
+                return true;
+            }
+            
+            // Validar em tempo real
+            confirmarSenha.addEventListener('input', validarSenhas);
+            senha.addEventListener('input', validarSenhas);
+            
+            // Validar antes de enviar
+            form.addEventListener('submit', function(e) {
+                if (!validarSenhas()) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+</style>
+<body>
+    <div class="container">
+        <h2>Registro</h2>
+        <form method="POST" action="/registro" id="registroForm">
+            {% if erro %}
+            <div class="error">{{ erro }}</div>
+            {% endif %}
+            {% if sucesso %}
+            <div class="success">{{ sucesso }}</div>
+            {% endif %}
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Digite seu email" required>
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmar_senha">Confirmar Senha</label>
+                <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Confirme sua senha" required>
+                <div id="senhaError" class="error" style="display: none; margin-top: 0.5rem;"></div>
+            </div>
+            <button class="btn" type="submit" id="submitBtn">Registrar</button>
+        </form>
+        
+        <div class="divider">
+            <span>ou</span>
+        </div>
+        
+        <a href="/login" class="btn btn-secondary">Já tenho conta</a>
+    </div>
+</body>
+</html> 
