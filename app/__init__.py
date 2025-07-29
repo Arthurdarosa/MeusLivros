@@ -36,8 +36,27 @@ def create_app():
     
     jwt.init_app(app)
     
-    # Configuração CORS comentada para teste
-    CORS(app, origins=["http://localhost:5000", "http://127.0.0.1:5000"], supports_credentials=True)
+    # Configuração CORS segura - apenas domínios específicos
+    allowed_origins = []
+    
+    # Adiciona domínios do Vercel (você deve substituir 'weblivros' pelo seu nome de projeto)
+    vercel_domain = os.environ.get('VERCEL_URL', '')
+    if vercel_domain:
+        allowed_origins.append(f"https://{vercel_domain}")
+    
+    # Adiciona domínios de desenvolvimento
+    if os.environ.get('FLASK_ENV') == 'development':
+        allowed_origins.extend([
+            "http://localhost:3000",
+            "http://localhost:5000", 
+            "http://127.0.0.1:5000"
+        ])
+    
+    # Se não houver origens configuradas, desabilita CORS
+    if allowed_origins:
+        CORS(app, origins=allowed_origins, supports_credentials=True)
+    else:
+        print("⚠️  CORS não configurado - configure VERCEL_URL ou FLASK_ENV")
 
     # Registro dos blueprints
     app.register_blueprint(livro_bp)
